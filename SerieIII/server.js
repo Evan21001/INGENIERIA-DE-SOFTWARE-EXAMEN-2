@@ -1,10 +1,11 @@
 /**
  * Serie III - Cloud Computing y CI/CD
- * Node.js sin dependencias extra. Azure usa process.env.PORT.
+ * Express. Azure usa process.env.PORT.
  * Opcional: STUDENT_NAME en configuracion de Azure.
  */
-const http = require("http");
+const express = require("express");
 
+const app = express();
 const port = Number(process.env.PORT) || 3000;
 const studentName =
   process.env.STUDENT_NAME || "Evan Jesus Tejada Duarte";
@@ -58,24 +59,22 @@ function htmlPage(name) {
 </html>`;
 }
 
-const server = http.createServer((req, res) => {
-  if (req.url === "/" || req.url === "/index.html") {
-    res.writeHead(200, {
-      "Content-Type": "text/html; charset=utf-8",
-      "Cache-Control": "no-store",
-    });
-    res.end(htmlPage(studentName));
-    return;
-  }
-  if (req.url === "/health") {
-    res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
-    res.end("ok");
-    return;
-  }
-  res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
-  res.end("No encontrado");
+function sendHome(req, res) {
+  res.set("Cache-Control", "no-store");
+  res.type("html").send(htmlPage(studentName));
+}
+
+app.get("/", sendHome);
+app.get("/index.html", sendHome);
+
+app.get("/health", (req, res) => {
+  res.type("text").send("ok");
 });
 
-server.listen(port, () => {
+app.use((req, res) => {
+  res.status(404).type("text").send("No encontrado");
+});
+
+app.listen(port, () => {
   console.log(`Serie III escuchando en http://localhost:${port}`);
 });

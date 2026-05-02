@@ -1,11 +1,15 @@
 {
-  "name": "serie-iii-web",
+  "name": "serie-iii-despliegue-azure",
   "version": "1.0.0",
   "private": true,
-  "description": "Serie III: app web minima para Azure App Service y CD desde GitHub",
+  "description": "Serie III - Ingenieria de Software: app Express con nombre del estudiante; Azure App Service + CD GitHub",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "echo Serie III listo para Azure"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
   },
   "engines": {
     "node": ">=18.0.0"
